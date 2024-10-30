@@ -1,0 +1,11 @@
+{
+    "name": "New Toys Demo Ruleset",
+    "description": "Ruleset to demonstrate 'this' keyword",
+    "rules": [
+        {
+            "id": "AA0248",
+            "action": "Warning",
+            "justification": "Need to show the Warning"
+        }
+    ]
+}
