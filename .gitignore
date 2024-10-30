@@ -1,0 +1,38 @@
+# Ignore the following files
+Thumbs.db
+
+# Ignore the following file types
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+# Important do not remove
+*.app
+*.flf
+*.yml
+
+# Ignore the following folders
+.alpackages/
+.alpackages/*
+.vscode/
+.vscode/*
+.vs/
+
+#Nuget packages folder
+packages/
+
+#Local Translation Files
+Translations
