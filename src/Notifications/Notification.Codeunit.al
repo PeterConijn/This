@@ -19,6 +19,10 @@ codeunit 50120 "Notification"
         SystemId: Guid;
         TableName: Text;
 
+    /// <summary>
+    /// Sends a notification for an item.
+    /// </summary>
+    /// <param name="Item">The item record to send a notification about.</param>
     procedure Send(Item: Record Item)
     var
         CurrentItem: Record Item;
@@ -34,6 +38,10 @@ codeunit 50120 "Notification"
         Send();
     end;
 
+    /// <summary>
+    /// Sends a notification for a customer.
+    /// </summary>
+    /// <param name="Customer">The customer record to send a notification about.</param>
     procedure Send(Customer: Record Customer)
     begin
         this.TableName := Customer.TableCaption();
@@ -44,6 +52,10 @@ codeunit 50120 "Notification"
         Send(); // Local procedures *do* need the 'this' keyword. The rule, AA0248, is normally disabled, but can be enabled in a custom ruleset
     end;
 
+    /// <summary>
+    /// Sends a notification for a vendor.
+    /// </summary>
+    /// <param name="Vendor">The vendor record to send a notification about.</param>
     procedure Send(Vendor: Record Vendor)
     begin
         this.TableName := Vendor.TableCaption();
