@@ -15,6 +15,13 @@ codeunit 50121 "Send Notification"
         NotificationToSend.Message := StrSubstNo(NotificationTxt, Notification.GetTableName().ToLower(), Notification.GetNo(), Notification.GetNameOrDescription(), Notification.GetSystemId());
 
         if NotificationToSend.Recall() then;
+
+        this.OnBeforeSendNotification(NotificationToSend);
         NotificationToSend.Send();
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeSendNotification(var NotificationToSend: Notification)
+    begin
     end;
 }

@@ -1,6 +1,7 @@
 namespace PC.This.Notifications;
 
 using Microsoft.Inventory.Item;
+using This.This;
 using Microsoft.Sales.Customer;
 using Microsoft.Purchases.Vendor;
 
@@ -9,6 +10,7 @@ codeunit 50120 "Notification"
     Access = Public;
     InherentEntitlements = X;
     InherentPermissions = X;
+    EventSubscriberInstance = Manual;
 
     var
         SendNotification: Codeunit "Send Notification";
@@ -29,7 +31,7 @@ codeunit 50120 "Notification"
         this.NameOrDescription := Item.Description;
         this.SystemId := Item.SystemId;
 
-        Send(); // Local procedures *do* need the 'this' keyword
+        Send();
     end;
 
     procedure Send(Customer: Record Customer)
@@ -39,7 +41,7 @@ codeunit 50120 "Notification"
         this.NameOrDescription := Customer.Name;
         this.SystemId := Customer.SystemId;
 
-        Send();
+        Send(); // Local procedures *do* need the 'this' keyword. The rule, AA0248, is normally disabled, but can be enabled in a custom ruleset
     end;
 
     procedure Send(Vendor: Record Vendor)
@@ -49,7 +51,9 @@ codeunit 50120 "Notification"
         this.NameOrDescription := Vendor.Name;
         this.SystemId := Vendor.SystemId;
 
+        BindSubscription(this); // You can bind and unbind a codeunit itself as a subscriber
         Send();
+        UnbindSubscription(this);
     end;
 
     internal procedure GetTableName(): Text
@@ -80,5 +84,11 @@ codeunit 50120 "Notification"
     local procedure Send()
     begin
         this.SendNotification.SendNotification(this);
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Send Notification", OnBeforeSendNotification, '', false, false)]
+    local procedure OnBeforeSendNotification(var NotificationToSend: Notification)
+    begin
+        NotificationToSend.AddAction('Check Color', Codeunit::"Check Color", 'CheckColor');
     end;
 }
