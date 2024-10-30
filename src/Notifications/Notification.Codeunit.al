@@ -29,7 +29,7 @@ codeunit 50120 "Notification"
         this.NameOrDescription := Item.Description;
         this.SystemId := Item.SystemId;
 
-        Send();
+        Send(); // Local procedures *do* need the 'this' keyword
     end;
 
     procedure Send(Customer: Record Customer)
