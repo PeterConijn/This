@@ -1,4 +1,4 @@
-namespace This.This;
+namespace PC.This.Notifications;
 
 codeunit 50126 "Check Color"
 {

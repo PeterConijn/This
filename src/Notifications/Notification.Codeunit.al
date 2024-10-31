@@ -1,16 +1,10 @@
 namespace PC.This.Notifications;
 
-using Microsoft.Inventory.Item;
-using This.This;
-using Microsoft.Sales.Customer;
-using Microsoft.Purchases.Vendor;
-
 codeunit 50120 "Notification"
 {
     Access = Public;
     InherentEntitlements = X;
     InherentPermissions = X;
-    EventSubscriberInstance = Manual;
 
     var
         SendNotification: Codeunit "Send Notification";
@@ -19,53 +13,29 @@ codeunit 50120 "Notification"
         SystemId: Guid;
         TableName: Text;
 
-    /// <summary>
-    /// Sends a notification for an item.
-    /// </summary>
-    /// <param name="Item">The item record to send a notification about.</param>
-    procedure Send(Item: Record Item)
-    var
-        CurrentItem: Record Item;
+    trigger OnRun()
     begin
-        CurrentItem := Item; // Local variables and parameters do not require the 'this' keyword
-        //this.CurrentItem := this.Item; // Local variables and parameters do not require the 'this' keyword
-
-        this.TableName := Item.TableCaption();
-        this.EntityNo := Item."No.";
-        this.NameOrDescription := Item.Description;
-        this.SystemId := Item.SystemId;
-
-        Send();
-    end;
-
-    /// <summary>
-    /// Sends a notification for a customer.
-    /// </summary>
-    /// <param name="Customer">The customer record to send a notification about.</param>
-    procedure Send(Customer: Record Customer)
-    begin
-        this.TableName := Customer.TableCaption();
-        this.EntityNo := Customer."No.";
-        this.NameOrDescription := Customer.Name;
-        this.SystemId := Customer.SystemId;
-
         Send(); // Local procedures *do* need the 'this' keyword. The rule, AA0248, is normally disabled, but can be enabled in a custom ruleset
     end;
 
-    /// <summary>
-    /// Sends a notification for a vendor.
-    /// </summary>
-    /// <param name="Vendor">The vendor record to send a notification about.</param>
-    procedure Send(Vendor: Record Vendor)
+    internal procedure SetTableName(NewTableName: Text);
     begin
-        this.TableName := Vendor.TableCaption();
-        this.EntityNo := Vendor."No.";
-        this.NameOrDescription := Vendor.Name;
-        this.SystemId := Vendor.SystemId;
+        this.TableName := NewTableName;
+    end;
 
-        BindSubscription(this); // You can bind and unbind a codeunit itself as a subscriber
-        Send();
-        UnbindSubscription(this);
+    internal procedure SetNo(NewNo: Code[20])
+    begin
+        this.EntityNo := NewNo;
+    end;
+
+    internal procedure SetNameOrDescription(NewNameOrDescription: Text)
+    begin
+        this.NameOrDescription := NewNameOrDescription;
+    end;
+
+    internal procedure SetSystemId(NewSystemId: Guid)
+    begin
+        this.SystemId := NewSystemId;
     end;
 
     internal procedure GetTableName(): Text
@@ -96,11 +66,5 @@ codeunit 50120 "Notification"
     local procedure Send()
     begin
         this.SendNotification.SendNotification(this);
-    end;
-
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Send Notification", OnBeforeSendNotification, '', false, false)]
-    local procedure OnBeforeSendNotification(var NotificationToSend: Notification)
-    begin
-        NotificationToSend.AddAction('Check Color', Codeunit::"Check Color", 'CheckColor');
     end;
 }

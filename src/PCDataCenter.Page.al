@@ -39,7 +39,7 @@ page 50120 "PC Data Center"
                         begin
                             Item.FindSet();
                             Item.Next();
-                            this.Notification.Send(Item);
+                            this.CreateAndSendNotification.Send(Item);
                         end;
                     }
                     field(SendCustomerNotification; this.SendCustomerNotificationLbl)
@@ -54,7 +54,7 @@ page 50120 "PC Data Center"
                             Customer: Record Customer;
                         begin
                             Customer.FindFirst();
-                            this.Notification.Send(Customer);
+                            this.CreateAndSendNotification.Send(Customer);
                         end;
                     }
                     field(SendVendorNotification; this.SendVendorNotificationLbl)
@@ -69,7 +69,7 @@ page 50120 "PC Data Center"
                             Vendor: Record Vendor;
                         begin
                             Vendor.FindFirst();
-                            this.Notification.Send(Vendor);
+                            this.CreateAndSendNotification.Send(Vendor);
                         end;
                     }
                 }
@@ -149,7 +149,7 @@ page 50120 "PC Data Center"
     end;
 
     var
-        Notification: Codeunit Notification;
+        CreateAndSendNotification: Codeunit "Create and Send Notification";
         EntityData: Codeunit "Entity Data";
         IDataRetrieval: Interface IDataRetrieval;
         EntityDataText: Text;
