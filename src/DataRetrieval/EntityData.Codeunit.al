@@ -10,32 +10,56 @@ codeunit 50122 "Entity Data"
     InherentPermissions = X;
 
     var
-        EntityData: JsonArray;
+        ConvertEntityData: Codeunit "Convert Entity Data";
+        EntityData: List of [Dictionary of [Text, Text]];
+        JEntityData: JsonArray;
 
     /// <summary>
-    /// Retrieve the data for the entity.
+    /// Retrieve the data for the entity as a key/value formatted text.
     /// </summary>
-    /// <returns>A JSON object containing the entity data.</returns>
-    procedure GetEntityData(): Text
-    var
-        StringBuilder: TextBuilder;
-        JObject: JsonObject;
-        JToken: JsonToken;
-        JKeys: List of [Text];
-        JKey: Text;
+    /// <returns>The entity data as text.</returns>
+    procedure GetEntityDataAsText(): Text
     begin
-        foreach JToken in this.EntityData do begin
-            JObject := JToken.AsObject();
-            JKeys := JObject.Keys();
+        this.ParseData();
 
-            foreach JKey in JKeys do begin
-                JObject.Get(JKey, JToken);
-                StringBuilder.AppendLine(JKey + ': ' + JToken.AsValue().AsText() + '; </br>');
-            end;
-            StringBuilder.AppendLine('</br>');
-        end;
+        exit(this.ConvertEntityData.ConvertToText(this));
+    end;
 
-        exit(StringBuilder.ToText());
+    /// <summary>
+    /// Retrieve the data for the entity as an xml formatted text.
+    /// </summary>
+    /// <returns>The entity data as an xml formatted text.</returns>
+    procedure GetEntityDataAsXmlText(): Text
+    begin
+        this.ParseData();
+
+        exit(this.ConvertEntityData.ConvertToXmlText(this));
+    end;
+
+    internal procedure GetEntityNo(Index: Integer): Text
+    var
+        EntityDataEntry: Dictionary of [Text, Text];
+    begin
+        EntityDataEntry := this.GetListEntry(Index);
+        exit(EntityDataEntry.Get('No'));
+    end;
+
+    internal procedure GetEntitySystemId(Index: Integer): Text
+    var
+        EntityDataEntry: Dictionary of [Text, Text];
+    begin
+        EntityDataEntry := this.GetListEntry(Index);
+        exit(EntityDataEntry.Get('SystemId'));
+    end;
+
+    internal procedure Count(): Integer
+    begin
+        exit(this.EntityData.Count());
+    end;
+
+    internal procedure GetEntityDataEntry(Index: Integer): Dictionary of [Text, Text]
+    begin
+        exit(this.GetListEntry(Index));
     end;
 
     internal procedure SetEntityData(var TempBlob: Codeunit "Temp Blob")
@@ -43,11 +67,38 @@ codeunit 50122 "Entity Data"
         JArray: JsonArray;
         InStream: InStream;
     begin
-        Clear(this.EntityData);
+        Clear(this.JEntityData);
 
         TempBlob.CreateInStream(InStream);
         JArray.ReadFrom(InStream);
 
-        this.EntityData := JArray;
+        this.JEntityData := JArray;
+    end;
+
+    local procedure GetListEntry(Index: Integer): Dictionary of [Text, Text];
+    begin
+        exit(this.EntityData.Get(Index));
+    end;
+
+    local procedure ParseData()
+    var
+        JObject: JsonObject;
+        JToken: JsonToken;
+        EntityDataEntry: Dictionary of [Text, Text];
+        JKeys: List of [Text];
+        JKey: Text;
+    begin
+        foreach JToken in this.JEntityData do begin
+            JObject := JToken.AsObject();
+            JKeys := JObject.Keys();
+
+            Clear(EntityDataEntry);
+            foreach JKey in JKeys do begin
+                JObject.Get(JKey, JToken);
+                EntityDataEntry.Add(JKey, JToken.AsValue().AsText());
+            end;
+
+            this.EntityData.Add(EntityDataEntry);
+        end;
     end;
 }
