@@ -161,14 +161,14 @@ page 50122 "PC Time Machine"
 
         this.SourceDateTime := CreateDateTime(this.SourceDate, this.SourceTime);
 
-        this.ParsedDate := this.SourceDateTime.Date();
-        this.ParsedTime := this.SourceDateTime.Time();
+        this.ParsedDate := this.SourceDateTime.Date(); // DT2Date(this.SourceDateTime);
+        this.ParsedTime := this.SourceDateTime.Time(); // DT2Time(this.SourceDateTime);
 
-        this.ParsedDay := this.ParsedDate.Day();
+        this.ParsedDay := this.ParsedDate.Day(); // Date2DMY(this.ParsedDate, 1);
         this.ParsedMonth := this.ParsedDate.Month();
         this.ParsedYear := this.ParsedDate.Year();
-        this.ParsedWeek := this.ParsedDate.WeekNo();
-        this.ParsedDayOfWeek := Enum::"Recurrence - Day of Week".FromInteger(this.ParsedDate.DayOfWeek());
+        this.ParsedWeek := this.ParsedDate.WeekNo(); // Date2DWY(this.ParsedDate, 2);
+        this.ParsedDayOfWeek := Enum::"Recurrence - Day of Week".FromInteger(this.ParsedDate.DayOfWeek()); // Date2DWY(this.ParsedDate, 1);
 
         this.ParsedHours := this.ParsedTime.Hour();
         this.ParsedMinutes := this.ParsedTime.Minute();
