@@ -32,6 +32,7 @@ codeunit 50128 "Convert Entity Data"
         EntryKey: Text;
         ListIndex: Integer;
     begin
+        // Note: The following code is a simplified version of the XML generation code, since richtext editors apparently cannot handle real XML.
         StringBuilder.AppendLine('[Items]' + this.GetLineBreak());
         for ListIndex := 1 to EntityData.Count() do begin
 
