@@ -182,7 +182,6 @@ page 50120 "PC Data Center"
                     InstructionalText = 'The data for the entity';
                     ToolTip = 'The data for the entity';
                     Editable = false;
-                    Enabled = false;
                     ShowCaption = false;
                     MultiLine = true;
                     ExtendedDatatype = RichContent;
@@ -192,18 +191,15 @@ page 50120 "PC Data Center"
     }
 
     local procedure UpdateEntityData(IDataRetrievalImplementation: Interface IDataRetrieval; OutputFormat: Option PlainText,Xml)
-    var
-        Result: Text;
     begin
+        Clear(this.EntityData);
         this.IDataRetrieval := IDataRetrievalImplementation;
         this.IDataRetrieval.RetrieveData(this.EntityData);
 
         if OutputFormat = OutputFormat::PlainText then
-            Result := this.EntityData.GetEntityDataAsText()
+            this.EntityDataText := this.EntityData.GetEntityDataAsText()
         else
-            Result := this.EntityData.GetEntityDataAsXmlText();
-
-        this.EntityDataText := Result;
+            this.EntityDataText := this.EntityData.GetEntityDataAsXmlText();
     end;
 
     var

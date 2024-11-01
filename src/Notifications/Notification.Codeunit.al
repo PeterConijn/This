@@ -15,7 +15,16 @@ codeunit 50120 "Notification"
 
     trigger OnRun()
     begin
-        Send(); // Local procedures *do* need the 'this' keyword. The rule, AA0248, is normally disabled, but can be enabled in a custom ruleset
+        this.SendNotification.SendNotification(this);
+    end;
+
+    procedure Send()
+    var
+        IsHandled: Boolean;
+    begin
+        OnBeforeSend(this, IsHandled); // Local procedures and events also need a "this" keyword
+        if not this.Run() then
+            Error(GetLastErrorText());
     end;
 
     internal procedure SetTableName(NewTableName: Text);
@@ -63,8 +72,8 @@ codeunit 50120 "Notification"
         exit('5f6fa6ef-6bd4-4d74-81b6-8fd7473650b8');
     end;
 
-    local procedure Send()
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeSend(Notification: Codeunit Notification; var IsHandled: Boolean)
     begin
-        this.SendNotification.SendNotification(this);
     end;
 }

@@ -25,7 +25,7 @@ codeunit 50128 "Convert Entity Data"
 
     procedure ConvertToXmlText(EntityData: Codeunit "Entity Data"): Text
     var
-        ItemElementTok: Label '....[Item No="%1" SystemId="%2"]', Locked = true;
+        ItemElementTok: Label '....[Entry No="%1" SystemId="%2"]', Locked = true;
         FieldElementTok: Label '........[%1]%2[/%1]', Locked = true;
         StringBuilder: TextBuilder;
 
@@ -33,7 +33,7 @@ codeunit 50128 "Convert Entity Data"
         ListIndex: Integer;
     begin
         // Note: The following code is a simplified version of the XML generation code, since richtext editors apparently cannot handle real XML.
-        StringBuilder.AppendLine('[Items]' + this.GetLineBreak());
+        StringBuilder.AppendLine('[Entries]' + this.GetLineBreak());
         for ListIndex := 1 to EntityData.Count() do begin
 
             StringBuilder.AppendLine(StrSubstNo(ItemElementTok, EntityData.GetEntityNo(ListIndex), EntityData.GetEntitySystemId(ListIndex)) + this.GetLineBreak());
@@ -41,9 +41,9 @@ codeunit 50128 "Convert Entity Data"
             foreach EntryKey in EntityData.GetEntityDataEntry(ListIndex).Keys() do
                 if not (EntryKey in ['No', 'SystemId']) then
                     StringBuilder.AppendLine(StrSubstNo(FieldElementTok, EntryKey, EntityData.GetEntityDataEntry(ListIndex).Get(EntryKey)) + this.GetLineBreak());
-            StringBuilder.AppendLine('....[/Item]' + this.GetLineBreak());
+            StringBuilder.AppendLine('....[/Entry]' + this.GetLineBreak());
         end;
-        StringBuilder.AppendLine('[/Items]' + this.GetLineBreak());
+        StringBuilder.AppendLine('[/Entries]' + this.GetLineBreak());
 
         exit(StringBuilder.ToText());
     end;

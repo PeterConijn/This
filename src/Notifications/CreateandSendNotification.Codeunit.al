@@ -21,15 +21,15 @@ codeunit 50127 "Create and Send Notification"
         CurrentItem: Record Item;
         Notification: Codeunit Notification;
     begin
-        CurrentItem := Item; // Local variables and parameters do not require the 'this' keyword
-        //this.CurrentItem := this.Item; // Local variables and parameters do not require the 'this' keyword
+        CurrentItem := Item;
+        // this.CurrentItem := this.Item; // Local variables and parameters should not have the 'this' keyword
 
         Notification.SetTableName(Item.TableCaption());
         Notification.SetNo(Item."No.");
         Notification.SetNameOrDescription(Item.Description);
         Notification.SetSystemId(Item.SystemId);
 
-        Notification.Run();
+        Notification.Send();
     end;
 
     /// <summary>
@@ -45,7 +45,7 @@ codeunit 50127 "Create and Send Notification"
         Notification.SetNameOrDescription(Customer.Name);
         Notification.SetSystemId(Customer.SystemId);
 
-        Notification.Run();
+        Notification.Send();
     end;
 
     /// <summary>
@@ -62,7 +62,7 @@ codeunit 50127 "Create and Send Notification"
         Notification.SetSystemId(Vendor.SystemId);
 
         BindSubscription(this); // You can bind and unbind a codeunit itself as a subscriber
-        Notification.Run();
+        Notification.Send();
         UnbindSubscription(this);
     end;
 

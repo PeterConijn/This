@@ -14,6 +14,9 @@ query 50122 "Vendor Data"
             column(SystemId; SystemId)
             {
             }
+            column(No; "No.")
+            {
+            }
             column(Name; Name)
             {
             }

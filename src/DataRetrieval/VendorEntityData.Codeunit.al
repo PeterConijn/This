@@ -12,17 +12,17 @@ codeunit 50125 "Vendor Entity Data" implements IDataRetrieval
     procedure RetrieveData(var EntityData: Codeunit "Entity Data")
     var
         TempBlob: Codeunit "Temp Blob";
-        CustomerData: Query "Customer Data";
+        VendorData: Query "Vendor Data";
         OutStream: OutStream;
     begin
-        if not CustomerData.Open() then
+        if not VendorData.Open() then
             exit;
 
         TempBlob.CreateOutStream(OutStream, TextEncoding::UTF8);
-        if CustomerData.SaveAsJson(OutStream) then
+        if VendorData.SaveAsJson(OutStream) then
             EntityData.SetEntityData(TempBlob);
 
-        CustomerData.Close();
+        VendorData.Close();
     end;
 
 }

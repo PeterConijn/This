@@ -36,6 +36,14 @@ codeunit 50122 "Entity Data"
         exit(this.ConvertEntityData.ConvertToXmlText(this));
     end;
 
+    internal procedure GetEntityTableName(Index: Integer): Text
+    var
+        EntityDataEntry: Dictionary of [Text, Text];
+    begin
+        EntityDataEntry := this.GetListEntry(Index);
+        exit(EntityDataEntry.Get('TableName'));
+    end;
+
     internal procedure GetEntityNo(Index: Integer): Text
     var
         EntityDataEntry: Dictionary of [Text, Text];
